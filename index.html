@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Doctor VPN - Ваш надежный защитник</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0f172a 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Красивый градиентный фон */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(59,130,246,0.15) 0%, rgba(6,182,212,0.05) 50%, transparent 80%),
+                        radial-gradient(circle at 80% 80%, rgba(139,92,246,0.1) 0%, transparent 60%);
+            background-size: 40px 40px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(40px, 40px);
+            }
+        }
+
+        /* Летающие слова */
+        .floating-words {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-word {
+            position: absolute;
+            font-size: 1.6rem;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            animation: floatWord 15s linear infinite;
+            font-family: 'Orbitron', monospace;
+            text-shadow: 0 0 15px rgba(59,130,246,0.6);
+            letter-spacing: 1px;
+        }
+
+        @keyframes floatWord {
+            0% {
+                transform: translateX(-10%) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateX(110%) translateY(-30px) rotate(5deg);
+                opacity: 0;
+            }
+        }
+
+        /* Стили для слов */
+        .floating-word:nth-child(1) { top: 8%; animation-duration: 12s; animation-delay: 0s; color: #3b82f6; }
+        .floating-word:nth-child(2) { top: 22%; animation-duration: 18s; animation-delay: 2s; color: #06b6d4; font-size: 1.9rem; }
+        .floating-word:nth-child(3) { top: 38%; animation-duration: 14s; animation-delay: 4s; color: #8b5cf6; }
+        .floating-word:nth-child(4) { top: 52%; animation-duration: 20s; animation-delay: 1s; color: #ec4899; font-size: 2rem; }
+        .floating-word:nth-child(5) { top: 68%; animation-duration: 16s; animation-delay: 6s; color: #10b981; }
+        .floating-word:nth-child(6) { top: 82%; animation-duration: 22s; animation-delay: 3s; color: #f59e0b; font-size: 1.8rem; }
+        .floating-word:nth-child(7) { top: 14%; animation-duration: 25s; animation-delay: 8s; color: #ef4444; }
+        .floating-word:nth-child(8) { top: 45%; animation-duration: 19s; animation-delay: 10s; color: #06b6d4; font-size: 2.2rem; }
+        .floating-word:nth-child(9) { top: 60%; animation-duration: 17s; animation-delay: 12s; color: #a855f7; }
+        .floating-word:nth-child(10) { top: 75%; animation-duration: 21s; animation-delay: 5s; color: #22c55e; }
+        .floating-word:nth-child(11) { top: 30%; animation-duration: 23s; animation-delay: 7s; color: #f43f5e; font-size: 1.7rem; }
+        .floating-word:nth-child(12) { top: 90%; animation-duration: 13s; animation-delay: 9s; color: #3b82f6; }
+        .floating-word:nth-child(13) { top: 5%; animation-duration: 28s; animation-delay: 11s; color: #d946ef; }
+        .floating-word:nth-child(14) { top: 48%; animation-duration: 24s; animation-delay: 13s; color: #fbbf24; font-size: 2rem; }
+        .floating-word:nth-child(15) { top: 18%; animation-duration: 26s; animation-delay: 14s; color: #34d399; }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 3rem;
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 20px rgba(59,130,246,0.5));
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* Красивый шрифт для заголовка */
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(59,130,246,0.3);
+        }
+
+        /* Тэглайн тоже красивым шрифтом */
+        .tagline {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        /* Кнопки с красивым шрифтом */
+        .nav-btn {
+            background: rgba(59,130,246,0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(59,130,246,0.5);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+            min-width: 200px;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6);
+            border-color: transparent;
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        .content {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            margin-bottom: 2rem;
+            min-height: 400px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-content {
+            text-align: center;
+        }
+
+        .welcome-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px rgba(59,130,246,0.5));
+        }
+
+        /* Красивый шрифт для заголовков в контенте */
+        .welcome-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .welcome-content p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 1rem auto;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .features-mini {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-mini {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-mini:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            background: rgba(59,130,246,0.15);
+        }
+
+        .feature-mini span {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Красивый шрифт для заголовков карточек */
+        .feature-mini h4 {
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .feature-mini p {
+            font-size: 0.9rem;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Тарифы */
+        .tariffs-content h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .tariff-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tariff-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            position: relative;
+        }
+
+        .tariff-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 20px 30px -10px rgba(59, 130, 246, 0.3);
+        }
+
+        .tariff-card.popular {
+            border: 2px solid #3b82f6;
+            transform: scale(1.05);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            padding: 0.3rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Красивый шрифт для названий тарифов */
+        .tariff-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .tariff-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .tariff-price span {
+            font-size: 1rem;
+            color: #94a3b8;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tariff-features {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .tariff-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tariff-features li::before {
+            content: "✓";
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        /* Кнопки с красивым шрифтом */
+        .tariff-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .tariff-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        /* ФУТЕР — обычный шрифт без изменений */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-btn {
+                padding: 0.8rem 1.5rem;
+                min-width: 150px;
+                font-size: 1rem;
+            }
+            
+            .tariff-card.popular {
+                transform: scale(1);
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .tariff-name {
+                font-size: 1.5rem;
+            }
+            
+            .tariff-price {
+                font-size: 2rem;
+            }
+            
+            .floating-word {
+                font-size: 1rem;
+            }
+            
+            .floating-word:nth-child(2),
+            .floating-word:nth-child(4),
+            .floating-word:nth-child(8),
+            .floating-word:nth-child(14) {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Летающие слова -->
+    <div class="floating-words">
+        <div class="floating-word">VPN</div>
+        <div class="floating-word">Свободный интернет</div>
+        <div class="floating-word">РКН</div>
+        <div class="floating-word">Безопасность</div>
+        <div class="floating-word">Анонимность</div>
+        <div class="floating-word">Шифрование</div>
+        <div class="floating-word">AES-256</div>
+        <div class="floating-word">Блокировок нет</div>
+        <div class="floating-word">Приватность</div>
+        <div class="floating-word">Турция</div>
+        <div class="floating-word">Telegram</div>
+        <div class="floating-word">YouTube</div>
+        <div class="floating-word">Instagram</div>
+        <div class="floating-word">WhatsApp</div>
+        <div class="floating-word">Netflix</div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🩺🔒</span>
+                <h1>Doctor VPN</h1>
+            </div>
+            <p class="tagline">Ваш личный доктор в мире интернет-безопасности</p>
+        </header>
+
+        <div class="nav-buttons">
+            <button class="nav-btn" id="welcomeBtn">✨ Добро пожаловать</button>
+            <button class="nav-btn" id="tariffsBtn">💰 Тарифы</button>
+        </div>
+
+        <div class="content" id="content"></div>
+
+        <footer>
+            <p>🔐 Doctor VPN — защита вашей приватности с 2026 года</p>
+            <p style="margin-top: 0.5rem;">© 2026 Doctor VPN. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <script>
+        function payTariff(tariffName, price) {
+            const paymentLink = `https://t.me/doctorpay_vpnbot?start=${tariffName.toLowerCase().replace(' ', '_')}_${price}`;
+            window.open(paymentLink, '_blank');
+            
+            const toast = document.createElement('div');
+            toast.textContent = `🔗 Перенаправление на оплату тарифа "${tariffName}" (${price} ₽)...`;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.right = '20px';
+            toast.style.backgroundColor = '#3b82f6';
+            toast.style.color = 'white';
+            toast.style.padding = '12px 24px';
+            toast.style.borderRadius = '8px';
+            toast.style.zIndex = '1000';
+            toast.style.fontSize = '14px';
+            toast.style.fontWeight = '500';
+            toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+            toast.style.animation = 'slideIn 0.3s ease';
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+        
+        function showWelcome() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="welcome-content">
+                    <div class="welcome-icon">🩺🔒</div>
+                    <h2>Добро пожаловать в Doctor VPN!</h2>
+                    <p>Мы заботимся о вашей безопасности в интернете так же, как хороший доктор заботится о вашем здоровье.</p>
+                    <p>Doctor VPN — это надежная защита ваших данных, анонимность в сети и свобода доступа к любому контенту.</p>
+                    
+                    <div class="features-mini">
+                        <div class="feature-mini">
+                            <span>🔒</span>
+                            <h4>Безопасность</h4>
+                            <p>Шифрование AES-256</p>
+                        </div>
+                        <div class="feature-mini">
+                            <span>🚀</span>
+                            <h4>Высокая скорость</h4>
+                            <p>Оптимальное соединение</p>
+                        </div>
+                        <div class="feature-mini">
+                            <span>📱</span>
+                            <h4>Неограниченно устройств</h4>
+                            <p>Сколько угодно устройств</p>
+                        </div>
+                        <div class="feature-mini">
+                            <span>💬</span>
+                            <h4>Доступ к мессенджерам</h4>
+                            <p>Telegram, WhatsApp и другие</p>
+                        </div>
+                    </div>
+                    
+                    <div class="welcome-icon" style="margin-top: 2rem; font-size: 3rem;">🚀</div>
+                    <p style="font-size: 1rem; color: #3b82f6;">Начните безопасное путешествие по интернету уже сегодня!</p>
+                </div>
+            `;
+            
+            content.style.animation = 'none';
+            content.offsetHeight;
+            content.style.animation = 'fadeIn 0.5s ease';
+        }
+        
+        function showTariffs() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="tariffs-content">
+                    <h2>Выберите свой тариф</h2>
+                    <div class="tariff-cards">
+                        <div class="tariff-card">
+                            <div class="tariff-name">Doctor KEY</div>
+                            <div class="tariff-price">19 ₽<span>/мес</span></div>
+                            <ul class="tariff-features">
+                                <li>📱 Неограниченное количество устройств</li>
+                                <li>💬 Доступ к мессенджерам:</li>
+                                <li style="list-style: none; padding-left: 1.5rem;">✓ Telegram</li>
+                                <li style="list-style: none; padding-left: 1.5rem;">✓ WhatsApp</li>
+                                <li style="list-style: none; padding-left: 1.5rem;">✓ Viber</li>
+                                <li style="list-style: none; padding-left: 1.5rem;">✓ Signal</li>
+                                <li style="list-style: none; padding-left: 1.5rem;">✓ Discord</li>
+                                <li>⚡ Скорость до 30 Mbps</li>
+                                <li>💬 Базовая поддержка</li>
+                            </ul>
+                            <button class="tariff-btn" onclick="payTariff('Doctor KEY', 19)">Выбрать тариф</button>
+                        </div>
+                        
+                        <div class="tariff-card popular">
+                            <div class="popular-badge">🔥 Рекомендуем</div>
+                            <div class="tariff-name">Doctor PRO</div>
+                            <div class="tariff-price">49 ₽<span>/мес</span></div>
+                            <ul class="tariff-features">
+                                <li>📱 Неограниченное количество устройств</li>
+                                <li>🌍 Доступ ко всем серверам</li>
+                                <li>🚀 Максимальная скорость</li>
+                                <li>💬 Доступ ко всем мессенджерам</li>
+                                <li>🎮 Доступ к играм и стримингу</li>
+                                <li>🔓 Обход любых блокировок</li>
+                                <li>⚡ Безлимитный трафик</li>
+                                <li>🛡️ Защита от DDoS</li>
+                                <li>👨‍⚕️ Приоритетная поддержка 24/7</li>
+                            </ul>
+                            <button class="tariff-btn" onclick="payTariff('Doctor PRO', 49)">Выбрать тариф</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            content.style.animation = 'none';
+            content.offsetHeight;
+            content.style.animation = 'fadeIn 0.5s ease';
+        }
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            showWelcome();
+            document.getElementById('welcomeBtn').addEventListener('click', showWelcome);
+            document.getElementById('tariffsBtn').addEventListener('click', showTariffs);
+        });
+    </script>
+</body>
+</html>
